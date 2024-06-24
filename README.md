@@ -6,13 +6,13 @@ This project simulate a basic leader election process in a distributed system. M
 
 Build and run the containers:
 
-```sh
+```bash
 docker-compose up --build
 ```
 
 Start the services using Docker Compose, this command will start Redis and three server instances.
 
-```sh
+```bash
 docker-compose up
 ```
 
@@ -24,7 +24,7 @@ Each server exposes a single HTTP endpoint that returns the current leader's ID.
 
 Example usage:
 
-```sh
+```bash
 curl http://localhost:8001/
 ```
 
