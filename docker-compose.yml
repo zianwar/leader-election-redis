@@ -1,0 +1,45 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server1
+    environment:
+      - PORT=8001
+      - REDIS_ADDR=redis:6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server2
+    environment:
+      - PORT=8002
+      - REDIS_ADDR=redis:6379
+    ports:
+      - "8002:8002"
+    depends_on:
+      - redis
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server3
+    environment:
+      - PORT=8003
+      - REDIS_ADDR=redis:6379
+    ports:
+      - "8003:8003"
+    depends_on:
+      - redis
