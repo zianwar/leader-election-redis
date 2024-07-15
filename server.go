@@ -15,10 +15,8 @@ import (
 
 func main() {
 	ctx := context.Background()
-	leaderKey := "leader"
-
+	leaderKey := "leaderPort"
 	port := env("PORT", "8001")
-	serviceId := fmt.Sprintf("service%s", port)
 
 	// Initialize Redis client
 	redisClient := redis.NewClient(&redis.Options{
@@ -39,8 +37,8 @@ func main() {
 		for {
 			leaderValue, err := redisClient.Get(ctx, leaderKey).Result()
 			if err == redis.Nil {
-				log.Printf("set %s to %s\n", leaderKey, serviceId)
-				redisClient.Set(ctx, leaderKey, serviceId, time.Second*10)
+				log.Printf("set %s to %s\n", leaderKey, port)
+				redisClient.Set(ctx, leaderKey, port, time.Second*10)
 			} else if err != nil {
 				log.Fatalln(err)
 			} else {
@@ -54,14 +52,14 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 
-	// Setup handler
+	// Setup handler to respond with what port the leader is running on.
 	r.GET("/", func(c *gin.Context) {
 		leaderValue, err := redisClient.Get(c.Request.Context(), leaderKey).Result()
 		if err == redis.Nil || err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"leader": leaderValue})
+		c.JSON(http.StatusOK, gin.H{leaderKey: leaderValue})
 	})
 
 	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
