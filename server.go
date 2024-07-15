@@ -42,7 +42,7 @@ func main() {
 			} else if err != nil {
 				log.Fatalln(err)
 			} else {
-				log.Printf("leader is %s\n", leaderValue)
+				log.Printf("leader is at port %s\n", leaderValue)
 			}
 			time.Sleep(time.Second * time.Duration(rand.IntN(10)+1))
 		}
