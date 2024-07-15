@@ -31,7 +31,7 @@ curl http://localhost:8001/
 Response:
 
 ```json
-{ "leader": "service8001" }
+{ "leaderPort": "8001" }
 ```
 
 # Data flow
